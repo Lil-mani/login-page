@@ -4,14 +4,40 @@ import Input from "../../components/Input";
 import Button from "../../components/Button";
 import useAuth from "../../hooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
-
+//import { addUser, deleteUser, getUsers, updateUser } from "../../bd/user.js";
 
 const Signup = () => {
 
     const consultarCep = () => {
+        console.log(cep);
         // Lógica para consultar o CEP
         // Você pode utilizar uma API de consulta de CEP aqui
         // Atualize os estados endereco, bairro, cidade e estado com os dados retornados pela API
+        fetch('https://viacep.com.br/ws/' + cep + '/json/')
+        .then(response => response.json())
+        .then(data => {
+            if (data.erro) {
+                alert('CEP não encontrado.');
+            } else {
+                // Preencha os campos de endereço com os dados retornados pela API
+                // document.getElementById('complemento').value = data.complemento;
+                // document.getElementById('endereco').value = data.logradouro;
+                // document.getElementById('bairro').value = data.bairro;
+                // document.getElementById('cidade').value = data.localidade;
+                // document.getElementById('uf').value = data.uf;
+                setEndereco(data.logradouro);
+                setBairro(data.bairro);
+                setCidade(data.localidade);
+                setEstado(data.uf);
+                // document.getElementById('uf').value = data.uf;
+                
+                // Preencha os demais campos de endereço, como bairro, cidade, etc., se necessário
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao obter dados do CEP:', error);
+            alert('Erro ao obter dados do CEP. Por favor, tente novamente.');
+        });
     };
     const navigate = useNavigate();
     const {signup} = useAuth();
@@ -38,12 +64,12 @@ const Signup = () => {
     const [emailconf,setEmailconf] = useState("");
     const [senha,setSenha] = useState("");
     // Infomações de enreço ----- Colocar a API de cep
-    const [cep,setCep] = useState("");
-    const [endereco,setEndereco] = useState("");
-    const [bairro,setBairro] = useState("");
-    const [cidade,setCidade] = useState("");
-    const [estado,setEstado] = useState("");
-    const [error,setError] = useState("");
+    var [cep,setCep] = useState("");
+    var [endereco,setEndereco] = useState("");
+    var [bairro,setBairro] = useState("");
+    var [cidade,setCidade] = useState("");
+    var [estado,setEstado] = useState("");
+    var [error,setError] = useState("");
 
     return (
         <C.Container>
